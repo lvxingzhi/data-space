@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lvxingzhi.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="[方案系列文章说明]: 该类型的文章是我在使用和学习中认为不错的解决办法,当然会有更好的方案,也一定会有, 所以文章具有一定的局限性, 请结合自己的思考辩证的看.  继续上代码 1, 加密工具类123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【方案】前后端数据传输加密实现方案 - 后端实现">
+<meta property="og:url" content="https://lvxingzhi.github.io/2021/11/19/8-%5B%E6%96%B9%E6%A1%88%5D%E5%89%8D%E5%90%8E%E7%AB%AF%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%8A%A0%E5%AF%86%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88%20-%20%E5%90%8E%E7%AB%AF/index.html">
+<meta property="og:site_name" content="吕兴志的原创知识库">
+<meta property="og:description" content="[方案系列文章说明]: 该类型的文章是我在使用和学习中认为不错的解决办法,当然会有更好的方案,也一定会有, 所以文章具有一定的局限性, 请结合自己的思考辩证的看.  继续上代码 1, 加密工具类123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-19T09:56:31.000Z">
+<meta property="article:modified_time" content="2026-04-03T08:25:56.164Z">
+<meta property="article:author" content="吕兴志">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lvxingzhi.github.io/2021/11/19/8-%5B%E6%96%B9%E6%A1%88%5D%E5%89%8D%E5%90%8E%E7%AB%AF%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%8A%A0%E5%AF%86%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88%20-%20%E5%90%8E%E7%AB%AF/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lvxingzhi.github.io/2021/11/19/8-%5B%E6%96%B9%E6%A1%88%5D%E5%89%8D%E5%90%8E%E7%AB%AF%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%8A%A0%E5%AF%86%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88%20-%20%E5%90%8E%E7%AB%AF/","path":"2021/11/19/8-[方案]前后端数据传输加密实现方案 - 后端/","title":"【方案】前后端数据传输加密实现方案 - 后端实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【方案】前后端数据传输加密实现方案 - 后端实现 | 吕兴志的原创知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">吕兴志的原创知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录,思考,成长,回忆</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section">首页</a></li><li class="menu-item menu-item-categories"><a href="/categories" rel="section">分类</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section">归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8A%A0%E5%AF%86%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">1, 加密工具类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">2, 过滤器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%87%8D%E5%86%99Request"><span class="nav-number">3.</span> <span class="nav-text">3, 重写Request</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%85%8D%E7%BD%AE%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">4, 配置过滤器</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="吕兴志"
+      src="/images/myhead.jpg">
+  <p class="site-author-name" itemprop="name">吕兴志</p>
+  <div class="site-description" itemprop="description">记录,思考,成长,回忆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives">
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lvxingzhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lvxingzhi" rel="noopener me" target="_blank">GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:349024548@qq.com" title="E-Mail → mailto:349024548@qq.com" rel="noopener me" target="_blank">E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lvxingzhi.github.io/2021/11/19/8-%5B%E6%96%B9%E6%A1%88%5D%E5%89%8D%E5%90%8E%E7%AB%AF%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%8A%A0%E5%AF%86%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88%20-%20%E5%90%8E%E7%AB%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/myhead.jpg">
+      <meta itemprop="name" content="吕兴志">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="吕兴志的原创知识库">
+      <meta itemprop="description" content="记录,思考,成长,回忆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【方案】前后端数据传输加密实现方案 - 后端实现 | 吕兴志的原创知识库">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【方案】前后端数据传输加密实现方案 - 后端实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-19 17:56:31" itemprop="dateCreated datePublished" datetime="2021-11-19T17:56:31+08:00">2021-11-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%96%B9%E6%A1%88/" itemprop="url" rel="index"><span itemprop="name">方案</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>[方案系列文章说明]: 该类型的文章是我在使用和学习中认为不错的解决办法,当然会有更好的方案,也一定会有, 所以文章具有一定的局限性, 请结合自己的思考辩证的看.</p>
+</blockquote>
+<p>继续上代码</p>
+<h2 id="1-加密工具类"><a href="#1-加密工具类" class="headerlink" title="1, 加密工具类"></a>1, 加密工具类</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 前后端请求加解密工具</span><br><span class="line"> *</span><br><span class="line"> * @Description</span><br><span class="line"> * @Author xingzhi.lv</span><br><span class="line"> * @Version 1.0</span><br><span class="line"> * @Date 2021/7/2 15:36</span><br><span class="line"> */</span><br><span class="line">public class RequestAESUtils &#123;</span><br><span class="line">    private static final String ENCRYPT_TYPE = &quot;AES&quot;;</span><br><span class="line">    private static final String CIPHER_MODEL = &quot;AES/ECB/PKCS5Padding&quot;;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 初始化加密</span><br><span class="line">     *</span><br><span class="line">     * @return</span><br><span class="line">     * @throws Exception</span><br><span class="line">     */</span><br><span class="line">    private static Cipher createAesCipher() throws Exception &#123;</span><br><span class="line">        return Cipher.getInstance(CIPHER_MODEL);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * AES方式加密</span><br><span class="line">     * Base64输出</span><br><span class="line">     *</span><br><span class="line">     * @param content</span><br><span class="line">     * @return</span><br><span class="line">     * @throws Exception</span><br><span class="line">     */</span><br><span class="line">    public static String encryptByAES(String content, String key) throws Exception &#123;</span><br><span class="line">        Cipher cipher = createAesCipher();</span><br><span class="line">        KeyGenerator keyGenerator = KeyGenerator.getInstance(ENCRYPT_TYPE);</span><br><span class="line">        keyGenerator.init(128, new SecureRandom(key.getBytes()));</span><br><span class="line">        SecretKeySpec secretKeySpec = new SecretKeySpec(Arrays.copyOf(key.getBytes(StandardCharsets.UTF_8), 16), ENCRYPT_TYPE);</span><br><span class="line">        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);</span><br><span class="line">        byte[] bytes = cipher.doFinal(content.getBytes());</span><br><span class="line">        // 对字节数组加密生成字符串</span><br><span class="line">        BASE64Encoder base64encoder = new BASE64Encoder();</span><br><span class="line">        String result = base64encoder.encode(bytes);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * AES方式解密</span><br><span class="line">     * Base64输入</span><br><span class="line">     *</span><br><span class="line">     * @param content</span><br><span class="line">     * @return</span><br><span class="line">     * @throws Exception</span><br><span class="line">     */</span><br><span class="line">    public static String decryptByAes(String content, String key) throws Exception &#123;</span><br><span class="line">        // 对字符串解密形成数组-&gt; 再转为对应编码字符串</span><br><span class="line">        BASE64Decoder dencode = new BASE64Decoder();//创建解码对象</span><br><span class="line">        byte[] bytes = dencode.decodeBuffer(content);//得到字节数组</span><br><span class="line">        Cipher cipher = createAesCipher();</span><br><span class="line">        KeyGenerator keyGenerator = KeyGenerator.getInstance(ENCRYPT_TYPE);</span><br><span class="line">        keyGenerator.init(128, new SecureRandom(key.getBytes()));</span><br><span class="line">        SecretKeySpec secretKeySpec = new SecretKeySpec(Arrays.copyOf(key.getBytes(StandardCharsets.UTF_8), 16), ENCRYPT_TYPE);</span><br><span class="line">        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);</span><br><span class="line">        byte[] resultDecryptByte = cipher.doFinal(bytes);</span><br><span class="line">        return new String(resultDecryptByte);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">//    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">//        String encryContent = RequestAESUtils.encryptByAES(&quot;138&quot;, &quot;0000000000000000&quot;);</span><br><span class="line">//        System.out.println(encryContent);</span><br><span class="line">//        String content = RequestAESUtils.decryptByAes(encryContent, &quot;0000000000000000&quot;);</span><br><span class="line">//        System.out.println(content);</span><br><span class="line">//        System.out.println(RequestAESUtils.decryptByAes(&quot;1BUqgKqSChvYM6xwB5wIzA==&quot;, &quot;0000000000000000&quot;));</span><br><span class="line">//    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+<h2 id="2-过滤器"><a href="#2-过滤器" class="headerlink" title="2, 过滤器"></a>2, 过滤器</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * web请求加解密</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * 要求header:</span><br><span class="line"> * [</span><br><span class="line"> * contentType: contentType支持application/json,application/x-www-form-urlencoded</span><br><span class="line"> * isEncrypt: true/false 解密/不解密</span><br><span class="line"> * decryptFields: user|age|id 需要解密的字段,以|分割</span><br><span class="line"> * method: POST/GET 支持POST/GET</span><br><span class="line"> * ]</span><br><span class="line"> *</span><br><span class="line"> * @Description</span><br><span class="line"> * @Author xingzhi.lv</span><br><span class="line"> * @Version 1.0</span><br><span class="line"> * @Date 2021/7/2 11:38</span><br><span class="line"> */</span><br><span class="line">// TODO extends oncefilter</span><br><span class="line">public class WebDecryptFilter implements Filter &#123;</span><br><span class="line">    private static final Logger logger = LoggerFactory.getLogger(WebDecryptFilter.class);</span><br><span class="line">    private final ObjectMapper objectMapper = new ObjectMapper();</span><br><span class="line">    private final static String POST = &quot;POST&quot;;</span><br><span class="line">    private final static String GET = &quot;GET&quot;;</span><br><span class="line">    private final static String HEADER_ENCRYPT_STATUS = &quot;isEncrypt&quot;;</span><br><span class="line">    private final static String HEADER_DECRYPT_FIELDS = &quot;encryptFields&quot;;</span><br><span class="line">    private final static String HEADER_DECRYPT_FIELDS_SPLIT = &quot;|&quot;;</span><br><span class="line">    // 秘钥</span><br><span class="line">    public static final String REQUEST_SECRET = &quot;0000000000000000&quot;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException &#123;</span><br><span class="line">        // TODO 测试文件上传有没有影响,各种请求类型有没有影响</span><br><span class="line">        if (!(request instanceof HttpServletRequest) || !(response instanceof HttpServletResponse)) &#123;</span><br><span class="line">            throw new ServletException(&quot;OncePerRequestFilter just supports HTTP requests&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        HttpServletRequest httpRequest = (HttpServletRequest) request;</span><br><span class="line">        // 不管什么类型都转换</span><br><span class="line">        WebDecryptFilterRequest webDecryptFilterRequest = new WebDecryptFilterRequest(httpRequest, httpRequest.getParameterMap());</span><br><span class="line">        try &#123;</span><br><span class="line">            if (!checkDecryptCondition(webDecryptFilterRequest)) &#123;</span><br><span class="line">                filterChain.doFilter(webDecryptFilterRequest, response);</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            Map&lt;String, Object&gt; parameterMap;</span><br><span class="line">            String contentType = webDecryptFilterRequest.getContentType();</span><br><span class="line">            if (contentType.contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE)) &#123;</span><br><span class="line">                parameterMap = dealUrlencodeVlue(webDecryptFilterRequest);</span><br><span class="line">            &#125; else if (contentType.contains(MediaType.APPLICATION_JSON_VALUE)) &#123;</span><br><span class="line">                parameterMap = dealJsonVlue(webDecryptFilterRequest);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                filterChain.doFilter(webDecryptFilterRequest, response);</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            webDecryptFilterRequest.setParameterMap(parameterMap);</span><br><span class="line">            logger.info(&quot;前后端数据AES解密, 解密前内容:[&#123;&#125;]&quot;, parameterMap);</span><br><span class="line">            parameterMap = decryptMapValues(parameterMap);</span><br><span class="line">            logger.info(&quot;前后端数据AES解密, 解密后内容:[&#123;&#125;]&quot;, parameterMap);</span><br><span class="line">            // 解密数据绑定到自定义request</span><br><span class="line">            webDecryptFilterRequest.setParameterMap(parameterMap);</span><br><span class="line">            filterChain.doFilter(webDecryptFilterRequest, response);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            logger.error(&quot;前后端数据AES解密, 解密异常!&quot;, e);</span><br><span class="line">            filterChain.doFilter(webDecryptFilterRequest, response);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取参数内容-urlencode</span><br><span class="line">     *</span><br><span class="line">     * @param request</span><br><span class="line">     */</span><br><span class="line">    private Map&lt;String, Object&gt; dealUrlencodeVlue(HttpServletRequest request) &#123;</span><br><span class="line">        Map&lt;String, Object&gt; parameterMap = new LinkedHashMap&lt;&gt;();</span><br><span class="line">        for (String reqParamMapKey : request.getParameterMap().keySet()) &#123;</span><br><span class="line">            parameterMap.put(reqParamMapKey, request.getParameterMap().get(reqParamMapKey)[0]);</span><br><span class="line">        &#125;</span><br><span class="line">        return parameterMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取参数内容-json</span><br><span class="line">     *</span><br><span class="line">     * @param webDecryptFilterRequest</span><br><span class="line">     */</span><br><span class="line">    private Map&lt;String, Object&gt; dealJsonVlue(WebDecryptFilterRequest webDecryptFilterRequest) throws IOException &#123;</span><br><span class="line">        Map&lt;String, Object&gt; parameterMap = new LinkedHashMap&lt;&gt;();</span><br><span class="line">        String data = StreamUtils.copyToString(webDecryptFilterRequest.getInputStream(), StandardCharsets.UTF_8);</span><br><span class="line">        parameterMap = objectMapper.readValue(data, parameterMap.getClass());</span><br><span class="line">        return parameterMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 解密</span><br><span class="line">     *</span><br><span class="line">     * @param parameterMap</span><br><span class="line">     * @return</span><br><span class="line">     * @throws Exception</span><br><span class="line">     */</span><br><span class="line">    private Map&lt;String, Object&gt; decryptMapValues(Map&lt;String, Object&gt; parameterMap) throws Exception &#123;</span><br><span class="line">        for (String paramKey : parameterMap.keySet()) &#123;</span><br><span class="line">            parameterMap.put(paramKey, RequestAESUtils.decryptByAes(parameterMap.get(paramKey).toString(), REQUEST_SECRET));</span><br><span class="line">        &#125;</span><br><span class="line">        return parameterMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 解密条件校验</span><br><span class="line">     *</span><br><span class="line">     * @return false:不解密 true:解密</span><br><span class="line">     */</span><br><span class="line">    private boolean checkDecryptCondition(HttpServletRequest request) &#123;</span><br><span class="line">        String isEncryStr = request.getHeader(HEADER_ENCRYPT_STATUS);</span><br><span class="line">        String decryptFieldsStr = request.getHeader(HEADER_DECRYPT_FIELDS);</span><br><span class="line">        String[] decryptFields = &#123;&#125;;</span><br><span class="line">        if (StringUtils.isNotBlank(decryptFieldsStr)) &#123;</span><br><span class="line">            decryptFields = decryptFieldsStr.split(HEADER_DECRYPT_FIELDS_SPLIT);</span><br><span class="line">        &#125;</span><br><span class="line">        // 解密开关,解密字段列表</span><br><span class="line">        boolean isEncry = Boolean.parseBoolean(isEncryStr);</span><br><span class="line">        if (!isEncry || decryptFields.length == 0) &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        // 请求类型</span><br><span class="line">        String method = request.getMethod();</span><br><span class="line">        if (!POST.equals(method) &amp;&amp; !GET.equals(method)) &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void init(FilterConfig filterConfig) throws ServletException &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void destroy() &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-重写Request"><a href="#3-重写Request" class="headerlink" title="3, 重写Request"></a>3, 重写Request</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 自定义解密Request</span><br><span class="line"> *</span><br><span class="line"> * @Description</span><br><span class="line"> * @Author xingzhi.lv</span><br><span class="line"> * @Version 1.0</span><br><span class="line"> * @Date 2021/7/2 14:10</span><br><span class="line"> */</span><br><span class="line">public class WebDecryptFilterRequest extends HttpServletRequestWrapper &#123;</span><br><span class="line"></span><br><span class="line">    // 解密参数存储</span><br><span class="line">    private Map&lt;String, String[]&gt; parameterMap = new LinkedHashMap&lt;&gt;();</span><br><span class="line">    // 原始数据流缓存</span><br><span class="line">    private byte[] bodyCache;</span><br><span class="line"></span><br><span class="line">    public WebDecryptFilterRequest(HttpServletRequest request, Map&lt;String, String[]&gt; parameterMap) throws IOException &#123;</span><br><span class="line">        super(request);</span><br><span class="line">        bodyCache = StreamUtils.copyToByteArray(request.getInputStream());</span><br><span class="line">        Map&lt;String, String[]&gt; copyParameterMap = new LinkedHashMap&lt;&gt;(parameterMap.size());</span><br><span class="line">        if(Objects.nonNull(parameterMap))&#123;</span><br><span class="line">            for (String key : parameterMap.keySet()) &#123;</span><br><span class="line">                copyParameterMap.put(key,parameterMap.get(key));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        this.parameterMap = copyParameterMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Enumeration&lt;String&gt; getParameterNames() &#123;</span><br><span class="line">        Vector&lt;String&gt; vector = new Vector&lt;&gt;(parameterMap.keySet());</span><br><span class="line">        return vector.elements();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String getParameter(String name) &#123;</span><br><span class="line">        String[] results = parameterMap.get(name);</span><br><span class="line">        if (results != null &amp;&amp; results.length &gt; 0) &#123;</span><br><span class="line">            return results[0];</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String[] getParameterValues(String name) &#123;</span><br><span class="line">        return parameterMap.get(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Map&lt;String, String[]&gt; getParameterMap() &#123;</span><br><span class="line">        return parameterMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setParameterMap(Map&lt;String, Object&gt; parameterMap) &#123;</span><br><span class="line">        parameterMap.forEach((key, value) -&gt; &#123;</span><br><span class="line">            if (value != null) &#123;</span><br><span class="line">                this.parameterMap.put(key, new String[]&#123;value.toString()&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public BufferedReader getReader() throws IOException &#123;</span><br><span class="line">        return new BufferedReader(new InputStreamReader(getInputStream()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public ServletInputStream getInputStream() &#123;</span><br><span class="line">        final ByteArrayInputStream bais = new ByteArrayInputStream(bodyCache);</span><br><span class="line">        return new ServletInputStream() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public int read() throws IOException &#123;</span><br><span class="line">                return bais.read();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public boolean isFinished() &#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public boolean isReady() &#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void setReadListener(ReadListener listener) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-配置过滤器"><a href="#4-配置过滤器" class="headerlink" title="4, 配置过滤器"></a>4, 配置过滤器</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;filter&gt;</span><br><span class="line">	&lt;filter-name&gt;webDecryptFilter&lt;/filter-name&gt;</span><br><span class="line">	&lt;filter-class&gt;com.qichengcx.common.web.fliter.WebDecryptFilter&lt;/filter-class&gt;</span><br><span class="line">	&lt;async-supported&gt;true&lt;/async-supported&gt;</span><br><span class="line">&lt;/filter&gt;</span><br><span class="line">&lt;filter-mapping&gt;</span><br><span class="line">	&lt;filter-name&gt;webDecryptFilter&lt;/filter-name&gt;</span><br><span class="line">	&lt;url-pattern&gt;/*&lt;/url-pattern&gt;</span><br><span class="line">&lt;/filter-mapping&gt;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/19/7-%5B%E6%96%B9%E6%A1%88%5D%E5%89%8D%E5%90%8E%E7%AB%AF%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%8A%A0%E5%AF%86%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88%20-%20%E5%89%8D%E7%AB%AF/" rel="prev" title="【方案】前后端数据传输加密实现方案 - 前端实现">
+                  <i class="fa fa-angle-left"></i> 【方案】前后端数据传输加密实现方案 - 前端实现
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/12/17/9-%5B%E6%96%87%E6%A1%A3%5DSTC-stcconfig%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" rel="next" title="【文档】STC-stcconfig 分布式动态配置中心使用手册">
+                  【文档】STC-stcconfig 分布式动态配置中心使用手册 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class=""></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">吕兴志</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
