@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/data-space/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/data-space/images/favicon-32x32-next.png">
@@ -19,7 +18,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"lvxingzhi.github.io","root":"/data-space/","images":"/data-space/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/data-space/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lvxingzhi.github.io","root":"/data-space/","images":"/data-space/images","scheme":"Gemini","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/data-space/js/config.js" defer></script>
 
     <meta name="description" content="[笔记系列文章说明]: 该类型的文章是笔者学习过程中整理的学习笔记.  本篇整理一下项目中用到的管理代码的规范 一, 项目分支结构分支环境:开发环境:dev测试环境:test预生产环境:prev生产环境:master 根据需要会分出test_2.0、test_bug等次级分支，测试到上线都会在这个分支进行。最终会同步到test、master分支。 二, 需求&amp;BUG分支创建与命名分支代码">
 <meta property="og:type" content="article">
@@ -30,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://lvxingzhi.github.io/data-space/images/51-01.png">
 <meta property="article:published_time" content="2020-04-10T03:14:18.000Z">
-<meta property="article:modified_time" content="2026-04-03T03:31:16.322Z">
+<meta property="article:modified_time" content="2026-04-03T05:36:13.570Z">
 <meta property="article:author" content="吕兴志">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://lvxingzhi.github.io/data-space/images/51-01.png">
@@ -141,6 +140,8 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="吕兴志"
+      src="/data-space/images/avatar.gif">
   <p class="site-author-name" itemprop="name">吕兴志</p>
   <div class="site-description" itemprop="description">记录,思考,成长,回忆</div>
 </div>
@@ -332,13 +333,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/data-space/2020/04/10/50-%5B%E7%AC%94%E8%AE%B0%5D%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7(%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0)/" rel="prev" title="【笔记】项目管理工具(持续更新)">
-                  <i class="fa fa-angle-left"></i> 【笔记】项目管理工具(持续更新)
+                <a href="/data-space/2019/05/15/54-%5B%E7%AC%94%E8%AE%B0%5Dlogback+MDC%E5%85%A8%E8%A7%A3%E6%9E%90/" rel="prev" title="【笔记】logback+MDC全解析">
+                  <i class="fa fa-angle-left"></i> 【笔记】logback+MDC全解析
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/data-space/2020/09/12/53-%5B%E7%AC%94%E8%AE%B0%5D%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89%E6%A0%87%E5%87%86%E5%8C%96%E8%A7%84%E8%8C%83/" rel="next" title="【笔记】对接接口定义标准化规范">
-                  【笔记】对接接口定义标准化规范 <i class="fa fa-angle-right"></i>
+                <a href="/data-space/2020/04/10/50-%5B%E7%AC%94%E8%AE%B0%5D%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7(%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0)/" rel="next" title="【笔记】项目管理工具(持续更新)">
+                  【笔记】项目管理工具(持续更新) <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
