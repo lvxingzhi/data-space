@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lvxingzhi.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"بحث...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="[项目系列文章说明]: 该类型的文章是对项目的实现方案和部分代码进行说明.  STC-stcconfig 分布式动态配置中心: 包含服务端,客户端包,WEB管理三大模块组成1,可实现配置,环境,项目三级管理.2,客户端动态下载,注解方式加载配置文件配置.3,服务端管理环境,zookeeper节点管理,版本管理,历史记录管理.4,WEB管理实现配置文件更新,客户端实时变更.  代码地址: http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【项目】STC-stcconfig 分布式动态配置中心">
+<meta property="og:url" content="https://lvxingzhi.github.io/2021/11/03/5-%5B%E9%A1%B9%E7%9B%AE%5DSTC-stcconfig/index.html">
+<meta property="og:site_name" content="吕兴志的原创知识库">
+<meta property="og:description" content="[项目系列文章说明]: 该类型的文章是对项目的实现方案和部分代码进行说明.  STC-stcconfig 分布式动态配置中心: 包含服务端,客户端包,WEB管理三大模块组成1,可实现配置,环境,项目三级管理.2,客户端动态下载,注解方式加载配置文件配置.3,服务端管理环境,zookeeper节点管理,版本管理,历史记录管理.4,WEB管理实现配置文件更新,客户端实时变更.  代码地址: http">
+<meta property="og:locale">
+<meta property="og:image" content="https://lvxingzhi.github.io/images/05-01.png">
+<meta property="og:image" content="https://lvxingzhi.github.io/images/05-02.png">
+<meta property="og:image" content="https://lvxingzhi.github.io/images/05-03.png">
+<meta property="og:image" content="https://lvxingzhi.github.io/images/05-04.png">
+<meta property="article:published_time" content="2021-11-03T08:12:31.000Z">
+<meta property="article:modified_time" content="2026-04-03T02:49:55.502Z">
+<meta property="article:author" content="吕兴志">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lvxingzhi.github.io/images/05-01.png">
+
+
+<link rel="canonical" href="https://lvxingzhi.github.io/2021/11/03/5-%5B%E9%A1%B9%E7%9B%AE%5DSTC-stcconfig/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"https://lvxingzhi.github.io/2021/11/03/5-%5B%E9%A1%B9%E7%9B%AE%5DSTC-stcconfig/","path":"2021/11/03/5-[项目]STC-stcconfig/","title":"【项目】STC-stcconfig 分布式动态配置中心"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【项目】STC-stcconfig 分布式动态配置中心 | 吕兴志的原创知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="تشغيل شريط التصفح" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">吕兴志的原创知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录,思考,成长,回忆</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="بحث" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section">Home</a></li><li class="menu-item menu-item-categories"><a href="/categories" rel="section">التصنيفات</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section">الأرشيفات</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          المحتويات
+        </li>
+        <li class="sidebar-nav-overview">
+          عام
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">系统实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96"><span class="nav-number">2.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%BE%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">难点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UI%E7%95%8C%E9%9D%A2%E5%B1%95%E7%A4%BA"><span class="nav-number">4.</span> <span class="nav-text">UI界面展示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E9%A1%B5"><span class="nav-number">4.1.</span> <span class="nav-text">首页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E7%AE%A1%E7%90%86"><span class="nav-number">4.2.</span> <span class="nav-text">环境管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86"><span class="nav-number">4.3.</span> <span class="nav-text">项目管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="nav-number">4.4.</span> <span class="nav-text">配置文件管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E"><span class="nav-number">5.</span> <span class="nav-text">使用说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B7%E5%8F%82%E8%80%83%E5%8F%A6%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0-%E3%80%90%E9%A1%B9%E7%9B%AE%E3%80%91STC-stcconfig-%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3"><span class="nav-number">5.1.</span> <span class="nav-text">请参考另一篇文章: 【项目】STC-stcconfig 使用文档</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">吕兴志</p>
+  <div class="site-description" itemprop="description">记录,思考,成长,回忆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives">
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">المقالات</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">التصنيفات</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">الوسوم</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lvxingzhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lvxingzhi" rel="noopener me" target="_blank">GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:349024548@qq.com" title="E-Mail → mailto:349024548@qq.com" rel="noopener me" target="_blank">E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://lvxingzhi.github.io/2021/11/03/5-%5B%E9%A1%B9%E7%9B%AE%5DSTC-stcconfig/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="吕兴志">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="吕兴志的原创知识库">
+      <meta itemprop="description" content="记录,思考,成长,回忆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【项目】STC-stcconfig 分布式动态配置中心 | 吕兴志的原创知识库">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【项目】STC-stcconfig 分布式动态配置中心
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">نُشر في</span>
+
+      <time title="أُنشأ: 2021-11-03 16:12:31" itemprop="dateCreated datePublished" datetime="2021-11-03T16:12:31+08:00">2021-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">في</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>[项目系列文章说明]: 该类型的文章是对项目的实现方案和部分代码进行说明.</p>
+</blockquote>
+<p>STC-stcconfig 分布式动态配置中心: 包含服务端,客户端包,WEB管理三大模块组成<br>1,可实现配置,环境,项目三级管理.<br>2,客户端动态下载,注解方式加载配置文件配置.<br>3,服务端管理环境,zookeeper节点管理,版本管理,历史记录管理.<br>4,WEB管理实现配置文件更新,客户端实时变更.</p>
+<blockquote>
+<p>代码地址: <a target="_blank" rel="noopener" href="https://github.com/lvxingzhi/stcconfig">https://github.com/lvxingzhi/stcconfig</a></p>
+</blockquote>
+<h2 id="系统实现原理"><a href="#系统实现原理" class="headerlink" title="系统实现原理"></a>系统实现原理</h2><blockquote>
+<p>注解实现配置注入<br>核心容器管理配置与注解对象,实现动态更新<br>https配置文件下载<br>zookeeper节点管理实现配置层级管理,监控机制实现订阅<br>服务器mysql持久化配置文件,客户端持久化本地<br>基于layui实现UI</p>
+</blockquote>
+<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><blockquote>
+<p>1, spring boot<br>2, mysql<br>3, zookeeper<br>4, fastjson, lombok等</p>
+</blockquote>
+<h2 id="难点"><a href="#难点" class="headerlink" title="难点"></a>难点</h2><blockquote>
+<p>1, 客户端实现动态配置文件下载,更新,监听<br>2, 服务端实现zookeeper节点管理,更新,对比,删除</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="UI界面展示"><a href="#UI界面展示" class="headerlink" title="UI界面展示"></a>UI界面展示</h2><h3 id="首页"><a href="#首页" class="headerlink" title="首页"></a>首页</h3><p><img src="/images/05-01.png"></p>
+<h3 id="环境管理"><a href="#环境管理" class="headerlink" title="环境管理"></a>环境管理</h3><p><img src="/images/05-02.png"></p>
+<h3 id="项目管理"><a href="#项目管理" class="headerlink" title="项目管理"></a>项目管理</h3><p><img src="/images/05-03.png"></p>
+<h3 id="配置文件管理"><a href="#配置文件管理" class="headerlink" title="配置文件管理"></a>配置文件管理</h3><p><img src="/images/05-04.png"></p>
+<h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><h3 id="请参考另一篇文章-【项目】STC-stcconfig-使用文档"><a href="#请参考另一篇文章-【项目】STC-stcconfig-使用文档" class="headerlink" title="请参考另一篇文章: 【项目】STC-stcconfig 使用文档"></a>请参考另一篇文章: 【项目】STC-stcconfig 使用文档</h3>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/03/4-%5B%E9%A1%B9%E7%9B%AE%5DSTC-stcdatacache/" rel="prev" title="【项目】STC-stcdatacache">
+                  <i class="fa fa-angle-left"></i> 【项目】STC-stcdatacache
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/11/19/6-%5B%E6%96%B9%E6%A1%88%5D%E5%89%8D%E5%90%8E%E7%AB%AF%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%8A%A0%E5%AF%86%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" rel="next" title="【方案】前后端数据传输加密实现方案">
+                  【方案】前后端数据传输加密实现方案 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class=""></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">吕兴志</span>
+  </div>
+  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
